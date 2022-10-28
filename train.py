@@ -27,7 +27,7 @@ def train(rank, a, h):
                            world_size=h.dist_config['world_size'] * h.num_gpus, rank=rank)
 
     torch.cuda.manual_seed(h.seed)
-    device = torch.device('cuda')
+    device = torch.cuda.current_device()
 
     generator = Generator(h).to(device)
     mpd = MultiPeriodDiscriminator().to(device)

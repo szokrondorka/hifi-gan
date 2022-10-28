@@ -264,7 +264,8 @@ def main():
     if h.num_gpus > 1:
         mp.spawn(train, nprocs=h.num_gpus, args=(a, h,))
     else:
-        train(0, a, h)
+        #train(0, a, h)
+        print('End')
 
 
 if __name__ == '__main__':

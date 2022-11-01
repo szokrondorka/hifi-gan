@@ -224,18 +224,17 @@ def train(rank, a, h):
             print('Time taken for epoch {} is {} sec\n'.format(epoch + 1, int(time.time() - start)))
             
             # checkpointing
-            if steps % a.checkpoint_interval == 0 and steps != 0:
-                checkpoint_path = "{}/g_{:08d}".format(a.checkpoint_path, steps)
-                save_checkpoint(checkpoint_path,
-                                {'generator': (generator.module if h.num_gpus > 1 else generator).state_dict()})
-                checkpoint_path = "{}/do_{:08d}".format(a.checkpoint_path, steps)
-                save_checkpoint(checkpoint_path, 
-                                {'mpd': (mpd.module if h.num_gpus > 1
-                                                     else mpd).state_dict(),
-                                 'msd': (msd.module if h.num_gpus > 1
-                                                     else msd).state_dict(),
-                                 'optim_g': optim_g.state_dict(), 'optim_d': optim_d.state_dict(), 'steps': steps,
-                                 'epoch': epoch})
+            checkpoint_path = "{}/g_{:08d}".format(a.checkpoint_path, steps)
+            save_checkpoint(checkpoint_path,
+                            {'generator': (generator.module if h.num_gpus > 1 else generator).state_dict()})
+            checkpoint_path = "{}/do_{:08d}".format(a.checkpoint_path, steps)
+            save_checkpoint(checkpoint_path, 
+                            {'mpd': (mpd.module if h.num_gpus > 1
+                                                 else mpd).state_dict(),
+                             'msd': (msd.module if h.num_gpus > 1
+                                                 else msd).state_dict(),
+                             'optim_g': optim_g.state_dict(), 'optim_d': optim_d.state_dict(), 'steps': steps,
+                             'epoch': epoch})
 
 
 def main():
@@ -252,7 +251,7 @@ def main():
     parser.add_argument('--config', default='')
     parser.add_argument('--training_epochs', default=1, type=int)
     parser.add_argument('--stdout_interval', default=5, type=int)
-    parser.add_argument('--checkpoint_interval', default=5000, type=int)
+    #parser.add_argument('--checkpoint_interval', default=5000, type=int)
     parser.add_argument('--summary_interval', default=100, type=int)
     parser.add_argument('--validation_interval', default=1000, type=int)
     parser.add_argument('--fine_tuning', default=False, type=bool)

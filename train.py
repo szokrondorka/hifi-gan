@@ -165,18 +165,18 @@ def train(rank, a, h):
                           format(steps, loss_gen_all, mel_error, time.time() - start_b))
 
                 # checkpointing
-                if steps % a.checkpoint_interval == 0 and steps != 0:
-                    checkpoint_path = "{}/g_{:08d}".format(a.checkpoint_path, steps)
-                    save_checkpoint(checkpoint_path,
-                                    {'generator': (generator.module if h.num_gpus > 1 else generator).state_dict()})
-                    checkpoint_path = "{}/do_{:08d}".format(a.checkpoint_path, steps)
-                    save_checkpoint(checkpoint_path, 
-                                    {'mpd': (mpd.module if h.num_gpus > 1
-                                                         else mpd).state_dict(),
-                                     'msd': (msd.module if h.num_gpus > 1
-                                                         else msd).state_dict(),
-                                     'optim_g': optim_g.state_dict(), 'optim_d': optim_d.state_dict(), 'steps': steps,
-                                     'epoch': epoch})
+#                if steps % a.checkpoint_interval == 0 and steps != 0:
+#                    checkpoint_path = "{}/g_{:08d}".format(a.checkpoint_path, steps)
+#                    save_checkpoint(checkpoint_path,
+#                                    {'generator': (generator.module if h.num_gpus > 1 else generator).state_dict()})
+#                    checkpoint_path = "{}/do_{:08d}".format(a.checkpoint_path, steps)
+#                    save_checkpoint(checkpoint_path, 
+#                                    {'mpd': (mpd.module if h.num_gpus > 1
+#                                                         else mpd).state_dict(),
+#                                     'msd': (msd.module if h.num_gpus > 1
+#                                                         else msd).state_dict(),
+#                                     'optim_g': optim_g.state_dict(), 'optim_d': optim_d.state_dict(), 'steps': steps,
+#                                     'epoch': epoch})
 
                 # Tensorboard summary logging
                 if steps % a.summary_interval == 0:
@@ -222,6 +222,20 @@ def train(rank, a, h):
         
         if rank == 0:
             print('Time taken for epoch {} is {} sec\n'.format(epoch + 1, int(time.time() - start)))
+            
+            # checkpointing
+            if steps % a.checkpoint_interval == 0 and steps != 0:
+                checkpoint_path = "{}/g_{:08d}".format(a.checkpoint_path, steps)
+                save_checkpoint(checkpoint_path,
+                                {'generator': (generator.module if h.num_gpus > 1 else generator).state_dict()})
+                checkpoint_path = "{}/do_{:08d}".format(a.checkpoint_path, steps)
+                save_checkpoint(checkpoint_path, 
+                                {'mpd': (mpd.module if h.num_gpus > 1
+                                                     else mpd).state_dict(),
+                                 'msd': (msd.module if h.num_gpus > 1
+                                                     else msd).state_dict(),
+                                 'optim_g': optim_g.state_dict(), 'optim_d': optim_d.state_dict(), 'steps': steps,
+                                 'epoch': epoch})
 
 
 def main():
